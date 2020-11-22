@@ -1,4 +1,4 @@
-export const apiUrl = (process.env.NODE_ENV === 'production') ? 'http://localhost:5000' : 'http://localhost:5000';
+export const apiUrl = 'http://localhost:5000';
 
 export const GET = (url, success, fail) => {
   fetch(apiUrl + url, {mode: 'cors'}).then((response) => {
