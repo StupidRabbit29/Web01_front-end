@@ -5,12 +5,12 @@ export const GET = (url, success, fail) => {
     if (response.ok) {
       return response.json();
     }
-    throw new Error(`网络请求失败，请稍后再试或咨询管理员。(${response.statusText})`);
+    throw new Error(`网络请求失败 (${response.statusText})`);
   }).then((json) => {
     if (json.result === 'success') {
       success(json);
     } else {
-      throw new Error('非法请求。');
+      fail(json.errMsg);
     }
   }).catch((errInfo) => fail(errInfo.message));
 };
@@ -27,7 +27,7 @@ export const POST = (url, payload, success, fail) => {
     if (response.ok) {
       return response.json();
     }
-    throw new Error(`网络请求失败，请稍后再试或咨询管理员。(${response.statusText})`);
+    throw new Error(`网络请求失败 (${response.statusText})`);
   }).then((json) => {
     if (json.result === 'success') {
       success(json);

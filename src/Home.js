@@ -36,10 +36,13 @@ const Home = (props) => {
     return (
       <div>
         <p>You are not log in!<br/>Log in first!</p>
-        <Link to="/login" >
-          <Button>Log In</Button>
+        <Link to="/signin" >
+          <Button>Sign In</Button>
         </Link>
-      </div>  
+        <Link to="/signup" >
+          <Button>Sign Up</Button>
+        </Link>
+      </div>
     );
   };
 };

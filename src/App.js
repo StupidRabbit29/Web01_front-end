@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Home from './Home';
-import Login from './Login';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -22,8 +23,11 @@ const App = () => {
           <Route exact path="/">
             <Home userVars={userVars} />
           </Route>
-          <Route exact path="/login">
-            <Login userVars={userVars} />
+          <Route exact path="/signin">
+            <SignIn userVars={userVars} />
+          </Route>
+          <Route exact path="/signup">
+            <SignUp userVars={userVars} />
           </Route>
         </Switch>
       </div>
