@@ -1,0 +1,10 @@
+.rcorners {
+    border-radius: 6px;
+    background: #f2f2f2;
+    padding: 20px;
+    width: 340px;
+    text-align: center;
+    margin: auto;
+    /* position: relative;
+    top: 200px; */
+}
