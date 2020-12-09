@@ -23,9 +23,7 @@ const Home = (props) => {
           </Row>
         </Layout.Header>
         <Layout.Content>
-          <p>{props.userVars.user}</p>
-          {/* <p>{location.state.userName}</p>
-          <p>{location.state.userPassword}</p> */}
+          {console.log(props.userVars)}
         </Layout.Content>
         <Layout.Footer>
         </Layout.Footer>  

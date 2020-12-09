@@ -8,35 +8,21 @@ import './SignIn&Up.css'
 
 const SignIn = (props) => {
   let history = useHistory();
+  const [form] = Form.useForm();
 
   const formSubmit = (values) => {
     // 用户验证
-    GET(`/login/${values.username}`, (json) => {
+    GET(`/signin?name=${values.name}&password=${values.password}`, (json) => {
       console.log(json);
+      props.userVars.userLogIn(json.userinfo[0])
+      history.push("/");
     }, (errMsg) => {
-      message.error(errMsg);
+        message.error(errMsg);
+        form.resetFields();
     })
 
-    // 后期需要改成响应后端返回结果，也有可能是错误的登录
-    if (true) {
-      props.userVars.setUser(values.username);
-      props.userVars.setEmail("test");
-      props.userVars.setPhone("test");
-      props.userVars.setUserType("1");
-      props.userVars.setIsLogIn(true);
-    };
-
-    // 登录验证通过，允许跳转到主页面
-    // const location = {
-      // pathname: "/", 
-      // state: {
-      //   userName: values.username,
-      //   userPassword: values.password
-      // }
-    // };
-    history.push("/");
   };
-  
+
   if (!props.userVars.isLogIn) {
     return (
       <div
@@ -56,9 +42,9 @@ const SignIn = (props) => {
         <h1 style={{ textAlign: 'center', }} >
           召集令系统用户登录
         </h1>
-        <div className="rcorners" >
-          <Form name="basic" initialValues={{ remember: true }} onFinish={formSubmit} >
-            <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]} >
+        <div className="rcorners" style={{ height: "184px" }} >
+          <Form form={form} name="basic" initialValues={{ remember: true }} onFinish={(values)=>formSubmit(values)} >
+            <Form.Item name="name" rules={[{ required: true, message: 'Please input your username!' }]} >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"
                 style={{ width: '100%', borderRadius: '6px'}}
@@ -80,6 +66,12 @@ const SignIn = (props) => {
               </Button>
             </Form.Item>
           </Form>
+          <Button type="link" htmlType="button"
+            style={{ width: '100%', borderRadius: '6px', border: 'none', fontSize: '16px', }}
+            onClick={()=>{history.push("/signup")}}
+          >
+            Create a new user!
+          </Button>
         </div>
       </div>
     );

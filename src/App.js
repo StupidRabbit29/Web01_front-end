@@ -7,13 +7,29 @@ import SignUp from './SignUp';
 const App = () => {
   const [user, setUser] = useState(null);
   // const [password, setPassword] = useState(null);
-  const [email, setEmail] = useState(null);
   const [phone, setPhone] = useState(null);
-  const [userType, setUserType] = useState(null);
+  const [description, setDescription] = useState("这个用户很懒，他什么也没有说");
+  const [userType, setUserType] = useState(1);
+  const [identityType, setIdentityType] = useState(null);
+  const [identityNum, setIdentityNum] = useState(null);
+  const [level, setLevel] = useState(1);
+  const [city, setCity] = useState(null);
   const [isLogIn, setIsLogIn] = useState(false);
 
+  const userLogIn = (userinfo) => {
+    setUser(userinfo.name);
+    setPhone(userinfo.phone_num);
+    setDescription(userinfo.description);
+    setUserType(userinfo.user_type);
+    setIdentityType(userinfo.identity_type);
+    setIdentityNum(userinfo.identity_num);
+    setLevel(userinfo.level);
+    setCity(userinfo.city);
+    setIsLogIn(true);
+  };
+
   const userVars = {
-    user, setUser, email, setEmail, phone, setPhone, userType, setUserType, isLogIn, setIsLogIn
+    user, setUser, phone, setPhone, description, setDescription, userType, setUserType, identityType, setIdentityType, identityNum, setIdentityNum, level, setLevel, city, setCity, isLogIn, setIsLogIn, userLogIn
   };
 
   return (

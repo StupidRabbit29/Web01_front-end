@@ -7,6 +7,7 @@ export const GET = (url, success, fail) => {
     }
     throw new Error(`网络请求失败 (${response.statusText})`);
   }).then((json) => {
+    console.log(json);
     if (json.result === 'success') {
       success(json);
     } else {
@@ -17,21 +18,22 @@ export const GET = (url, success, fail) => {
 
 export const POST = (url, payload, success, fail) => {
   fetch(apiUrl + url, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      mode: 'cors',
-    }).then((response) => {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    mode: 'cors',
+  }).then((response) => {
     if (response.ok) {
       return response.json();
     }
     throw new Error(`网络请求失败 (${response.statusText})`);
   }).then((json) => {
+    console.log(json);
     if (json.result === 'success') {
       success(json);
-    } else if (json.result === 'error') {
+    } else if (json.result === 'fail') {
       fail(json.errMsg);
     } else {
       throw new Error('非法请求。');
