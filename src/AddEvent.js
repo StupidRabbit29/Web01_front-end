@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 
 
-import { Modal, Card, Avatar, Layout, Button } from 'antd'; 
+import { Modal, Card, Avatar, Layout, Button, Upload } from 'antd'; 
+
+import { Divider } from 'antd';
+
+import { PlusCircleOutlined } from '@ant-design/icons'
 
 import avatar from "./avatar.png";
 import swain from "./swain.jpg";
 //import Layout from 'antd/lib/layout/layout';
 
 
-export const ShowCard = (props) => {
+export const AddEvent = (props) => {
     
     
   const [value, setValue] = useState(0);
@@ -37,28 +41,20 @@ export const ShowCard = (props) => {
 
   return (
     <>
-      <Card
-        hoverable
+      <Button
         onClick={showModal}
         style={{
-          width: 320
+          marginLeft: 860
         }}
-        cover={
-          <img
-          src={swain}
-          alt='swain'
-          />
-        }
       >
-        <Card.Meta
-          avatar={<Avatar src={avatar} />}
-          // 此处应该加入省略排版
-          title='The Noxian Grand General'
-          description='League of Legends Champions'
-        />
-      </Card>
+        new
+        <Divider type='vertical' />
+        <PlusCircleOutlined />
+      </Button>
+
+
       <Modal
-        title={<div style={{fontSize: 20}}>this is a title</div>}
+        title={<div style={{fontSize: 20}}>Add new card</div>}
         centered
         width={1000}
         visible={isModalVisible}
@@ -98,45 +94,11 @@ export const ShowCard = (props) => {
                   marginRight: 10
                 }}
               >
-                <Avatar
-                  src={avatar}
-                  size={90}
-                />
+                
               </Layout.Sider>
               
-              <p
-                style={{
-                  fontSize: 18,
-                }}
-              >
-                <b>binbin</b><br />
-                13XXXXXXXXX<br />
-                gold level
-              </p>
-            </Layout>
 
-            <p
-              style={{
-                fontSize: 16,
-                marginRight: 20
-              }}
-            >
-              personal intro: 
-              i am binbin. i love zhuzhu. 
-              i am binbin. i love zhuzhu. 
-              i am binbin. i love zhuzhu. <br />
-              event number: 00{value}<br />
-              date of start: 2020-12-9<br />
-              date of end: 2020-12-15<br />
-              event intro: <br />
-              This is an event. This is an event.
-              This is an event. This is an event.
-              This is an event. This is an event.
-              This is an event. This is an event.
-              This is an event. This is an event.
-              This is an event. This is an event.
-              This is an event. This is an event.
-            </p>
+            </Layout>
 
           </Layout.Sider>
           <Layout.Content>
