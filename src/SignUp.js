@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Input, Form, message, Radio } from 'antd';
-import { Link, Redirect, useHistory  } from 'react-router-dom';
+import { useHistory  } from 'react-router-dom';
 import { GET, POST } from './Network';
 import { UserOutlined, LockOutlined, PhoneOutlined, HomeOutlined, IdcardOutlined, EditOutlined } from '@ant-design/icons';
 import doge from "./doge.png"
 import './SignIn&Up.css'
 
-const SignUp = (props) => {
+export const SignUp = (props) => {
   let history = useHistory();
   const [idtype, setIDType] = useState(1);
   const [form] = Form.useForm();
@@ -30,7 +30,7 @@ const SignUp = (props) => {
     }, (errMsg) => {
       message.error(errMsg);
       form.resetFields();
-    })
+    });
   };
   
   if (!props.userVars.isLogIn) {
@@ -114,5 +114,3 @@ const SignUp = (props) => {
     return (null);
   };
 };
-
-export default SignUp;

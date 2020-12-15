@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "version": "0.2.0",
     "configurations": [
@@ -12,4 +13,20 @@
         }
       }
     ]
+=======
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Chrome",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceFolder}/src",
+        "sourceMapPathOverrides": {
+          "webpack:///src/*": "${webRoot}/*"
+        }
+      }
+    ]
+>>>>>>> 04e82073b0f4e53cdb947c45d27efa10f4a27117
   }

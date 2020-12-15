@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import Home from './Home';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
+import { Home } from './Home';
+import { SignIn } from './SignIn';
+import { SignUp } from './SignUp';
+import './App.less';
 
 const App = () => {
   const [user, setUser] = useState(null);
