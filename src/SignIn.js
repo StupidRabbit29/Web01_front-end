@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Input, Form, message } from 'antd';
-import { Link, Redirect, useHistory  } from 'react-router-dom';
+import { useHistory  } from 'react-router-dom';
 import { GET } from './Network';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import doge from "./doge.png"
 import './SignIn&Up.css'
 
-const SignIn = (props) => {
+export const SignIn = (props) => {
   let history = useHistory();
   const [form] = Form.useForm();
 
@@ -14,7 +14,7 @@ const SignIn = (props) => {
     // 用户验证
     GET(`/signin?name=${values.name}&password=${values.password}`, (json) => {
       console.log(json);
-      props.userVars.userLogIn(json.userinfo[0])
+      props.userVars.userLogIn(json.userinfo[0]);
       history.push("/");
     }, (errMsg) => {
         message.error(errMsg);
@@ -81,4 +81,3 @@ const SignIn = (props) => {
   };
 };
 
-export default SignIn;

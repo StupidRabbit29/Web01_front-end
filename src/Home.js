@@ -1,40 +1,28 @@
 import React, { useState } from 'react';
+import { Link, useLocation, useHistory } from "react-router-dom";
 
-import { Link, useLocation } from "react-router-dom";
-//import 'antd/dist/antd.css';
-import './Home.less';
-
-import { ConfigProvider, DatePicker, message, Empty } from 'antd';
-import { Layout, Menu, Button, Affix} from 'antd';
-import { Input } from 'antd';
-import { Avatar, Card, Tag, Divider, Select } from 'antd';
-import { Row, Col } from 'antd';
-
-import { Tooltip } from 'antd';
-import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
-
-
-import { ShowCard } from './ShowCard';
-import { AddEvent } from './AddEvent';
-
+import { Layout, Menu, Button, Affix, Avatar, Card, Tag, Divider, Select, Input, Row, Col, Tooltip, ConfigProvider, DatePicker, message, Empty} from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons'
 
 import avatar from "./avatar.png";
 import swain from "./swain.jpg";
-
-
-import { PlusCircleOutlined } from '@ant-design/icons'
+//import 'antd/dist/antd.css';
+import './Home.less';
 
 import { IconMap } from 'antd/lib/result';
 import TextArea from 'antd/lib/input/TextArea';
+import { ShowCard } from './ShowCard.js';
+import { UserInfo } from './UserInfo.js';
+import { Manager } from './Manager.js';
+
+import { AddEvent } from "./AddEvent.js";
 
 const { Search } = Input;
 const onSearch = value => console.log(value);
-
 const cardnum = 35;
 
-
-
-const Home = (props) => {
+export const Home = (props) => {
+  let history = useHistory();
   // let location = useLocation();
   // props.userVars.setIsLogIn(true);
 
@@ -61,11 +49,11 @@ const Home = (props) => {
             <Layout
               className='sider-back'
               style={{
-                height: '100%'
+                height: '100%',
+                backgroundColor: '#FDEBD0'
               }}
             >
               <Layout.Content>
-              
                 <Layout
                   className='headpic-back'
                   style={{
@@ -83,45 +71,18 @@ const Home = (props) => {
                     }} />
                 </Layout>
                 
-                <Layout
-                  style={{
-                    height: 350,
-                    backgroundColor: 'transparent'
-                  }}
-                >
-                  <p
-                    //WITH LINK!!!
-                    style={{
-                      fontSize: 35,
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}
+                <div style={{ height: 200 }} >
+                  <UserInfo userVars={props.userVars} />
+                </div>
+
+                <div style={{ height: 50, textAlign: 'center' }} >
+                  <Button type='link' shape="round"
+                    onClick={() => { props.userVars.setIsLogIn(false); }}
                   >
-                    {props.userVars.user}
-                  </p>
-                  <p
-                    style={{
-                      textAlign: 'center',
-                      fontSize: 20
-                    }}
-                  >
-                    attribute 1: value1
-                    <br />
-                    attribute 2: value2
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 16,
-                      textAlign: 'center',
-                      margin: '0px 30px 0px 30px'
-                    }}
-                  >personal message personal message personal
-                    message personal message personal message
-                    personal message personal message personal
-                    message personal message personal message </p>
-                </Layout>
-                
-                
+                    退出登录
+                  </Button>
+                </div>
+
                 <Menu
                   theme='light'
                   mode='inline'
@@ -139,7 +100,18 @@ const Home = (props) => {
                     className='menu-text'
                     key="3"
                   >Joined</Menu.Item>
+                  {props.userVars.userType == 2 ?
+                    <Menu.Item
+                      className='menu-text'
+                      key="4"
+                    >
+                      Manage
+                    </Menu.Item> :
+                    <></>
+                  }
                 </Menu>
+
+                <Manager />
 
                 <Layout
                   style={{
@@ -154,7 +126,6 @@ const Home = (props) => {
                   >
                     ©2020 Binbin&Xuanxuan. <br /> All rights reserved.
                   </p>
-
                 </Layout>
               </Layout.Content>
             </Layout>
@@ -284,22 +255,8 @@ const Home = (props) => {
       </Layout>
     );
   }
-
-
   else {
-    // 如果没有登录给用户展示什么还需要改
-    return (
-      <div>
-        <p>You are not log in!<br/>Log in first!</p>
-        <Link to="/signin" >
-          <Button>Sign In</Button>
-        </Link>
-        <Link to="/signup" >
-          <Button>Sign Up</Button>
-        </Link>
-      </div>
-    );
+    history.push("/signin");
+    return (null);
   };
 };
-
-export default Home;
