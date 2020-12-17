@@ -15,7 +15,7 @@ import { ShowCard } from './ShowCard.js';
 import { UserInfo } from './UserInfo.js';
 import { Manager } from './Manager.js';
 
-import { AddEvent } from "./AddEvent.js";
+import { AddEvent } from './AddEvent.js';
 
 const { Search } = Input;
 const onSearch = value => console.log(value);
@@ -26,13 +26,17 @@ export const Home = (props) => {
   // let location = useLocation();
   // props.userVars.setIsLogIn(true);
 
+  
+  const [pageHeight, setPageHeight] = useState(window.document.body.clientHeight);
+  const [pageWidth, setPageWidth] = useState(window.document.body.clientWidth);
+
 
   if (props.userVars.isLogIn) {
     return (
       <Layout
         className='layout'
         style={{
-          height: '100%'
+          height: pageHeight
         }}
       >
         <Affix
@@ -42,14 +46,14 @@ export const Home = (props) => {
             width={350}
             style={{
               borderRight: 0,
-              height: '100vh'
+              height: pageHeight
             }}
           >
             
             <Layout
               className='sider-back'
               style={{
-                height: '100%',
+                height: pageHeight,
                 backgroundColor: '#FDEBD0'
               }}
             >
@@ -140,7 +144,7 @@ export const Home = (props) => {
               className='header-back'
               style={{
                 padding: 0,
-                // backgroundColor: 'black'
+                backgroundColor: 'black'
               }}
             >
               <Search
@@ -167,10 +171,10 @@ export const Home = (props) => {
                   <Select.Option value='2'>学业探讨</Select.Option>
                   <Select.Option value='3'>社会实践</Select.Option>
                   <Select.Option value='4'>公益志愿</Select.Option>
-                  <Select.Option value='5'>游玩</Select.Option>
+                  <Select.Option value='5'>娱乐游玩</Select.Option>
                 </Select>
 
-              <AddEvent />
+              <AddEvent userVars={ props.userVars }/>
 
             </Layout.Header>
           </Affix>

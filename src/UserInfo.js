@@ -182,7 +182,7 @@ export const UserInfo = (props) => {
             label="用户描述"
             rules={[{ required: false }]}
           >
-            <Input />
+            <Input autocomplete='off'/>
           </Form.Item>
           <Form.Item {...tailLayout} >
             <Button type="primary" htmlType="submit" >
