@@ -241,18 +241,6 @@ const UserList = () => {
               </p>
             </Col>
           </Row>
-          {/* <Row align="middle" >
-            <Col span={6} >
-              <Button shape="round" type="primary" disabled={item.current} style={{ border: 0, }}>
-                Set as Current
-              </Button>
-            </Col>
-            <Col span={10} offset={2} >
-              <p style={{ fontSize: 14, margin: '0px 0px 4px', padding: 0 }} >
-                {item.time} by <b>{item.owner}</b> ver. <b>{item.version}</b>
-              </p>
-            </Col>
-          </Row> */}
         </List.Item>
       )}
     />

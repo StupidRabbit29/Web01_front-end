@@ -155,7 +155,7 @@ export const UserInfo = (props) => {
           </>
         }
       >
-        <Form name="changeuserinfo" onFinish={formSubmit} form={form} {...layout} >
+        <Form name="changeuserinfo" onFinish={formSubmit} form={form} {...layout} autocomplete="off" >
           <Form.Item
             name="user"
             label="用户名"

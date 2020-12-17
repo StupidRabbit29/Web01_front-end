@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useHistory } from "react-router-dom";
 
 import { Layout, Menu, Button, Affix, Avatar, Card, Tag, Divider, Select, Input, Row, Col, Tooltip, ConfigProvider, DatePicker, message, Empty} from 'antd';
@@ -25,31 +25,35 @@ export const Home = (props) => {
   let history = useHistory();
   // let location = useLocation();
   // props.userVars.setIsLogIn(true);
+  const [pageHeight, setPageHeight] = useState(window.document.body.clientHeight);
+  const [pageWidth, setPageWidth] = useState(window.document.body.innerWidth);
 
+  useEffect(() => {
+    setPageHeight(window.document.body.clientHeight);
+    setPageWidth(window.document.body.innerWidth);
+  });
 
   if (props.userVars.isLogIn) {
     return (
       <Layout
         className='layout'
         style={{
-          height: '100%'
+          height: pageHeight,
+          width: pageWidth
         }}
       >
-        <Affix
-          offsetTop={0}
-        >
+        <Affix offsetTop={0} >
           <Layout.Sider
             width={350}
             style={{
               borderRight: 0,
-              height: '100vh'
+              height: pageHeight
             }}
           >
-            
             <Layout
               className='sider-back'
               style={{
-                height: '100%',
+                height: pageHeight,
                 backgroundColor: '#FDEBD0'
               }}
             >
@@ -132,32 +136,29 @@ export const Home = (props) => {
           </Layout.Sider>
         </Affix>
 
-        <Layout>
-          <Affix
-            offsetTop={0}
-          >
-            <Layout.Header
-              className='header-back'
-              style={{
-                padding: 0,
-                // backgroundColor: 'black'
-              }}
-            >
-              <Search
-                className="searchBox"
-                placeholder='Search something'
-                allowClear
-                onSearch={onSearch}
-                background='transparent'
+        <Layout.Content className='content-back' width={pageWidth - 350} >
+          <Layout >
+            <Affix offsetTop={0} >
+              <Layout.Header
+                className='header-back'
                 style={{
-                  width: 400,
-                  margin: '16px 26px',
-                  background: 'transparent',
-                  
+                  padding: 0,
+                  // backgroundColor: 'black'
                 }}
-                
-              />
-
+              >
+                <Search
+                  className="searchBox"
+                  placeholder='Search something'
+                  allowClear
+                  onSearch={onSearch}
+                  background='transparent'
+                  style={{
+                    width: 400,
+                    margin: '16px 26px',
+                    background: 'transparent',
+                    
+                  }}
+                />
                 <Select
                   defaultValue='all'
                   style={{ width: 120 }}  
@@ -169,89 +170,22 @@ export const Home = (props) => {
                   <Select.Option value='4'>公益志愿</Select.Option>
                   <Select.Option value='5'>游玩</Select.Option>
                 </Select>
+                <AddEvent />
+              </Layout.Header>
+            </Affix>
 
-              <AddEvent />
-
-            </Layout.Header>
-          </Affix>
-
-          <Layout.Content
-            className='content-back'
-          >
-            
-
-            <div className="card-area"
-              style={{
-                marginTop: 30,
-                marginLeft: 40
-              }}
-            >
-              <Row gutter={[16,32]}>
-                <Col span={6}>
-                  <ShowCard attr={1}/>
-                </Col>
-                <Col span={6}>
-                  <ShowCard attr={2}/>
-                </Col>
-                <Col span={6}>
-                  <ShowCard attr={3}/>
-                </Col>
-                <Col span={6}>
-                  <ShowCard attr={4}/>
-                </Col>
-
-                <Col span={6}>
-                  <ShowCard attr={5}/>
-                </Col>
-                <Col span={6}>
-                  <ShowCard attr={6}/>
-                </Col>
-                <Col span={6}>
-                  <ShowCard attr={7}/>
-                </Col>
-                <Col span={6}>
-                  <ShowCard attr={8}/>
-                </Col>
-{/* 
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col> */}
-
-              </Row>
-
-            </div>
-
-
-
-
-            {/* <p>{location.state.userName}</p>
-            <p>{location.state.userPassword}</p> */}
-          </Layout.Content>
-        </Layout>
-
-        
+            <Layout.Content className='content-back' >
+              <div className="card-area"
+                style={{
+                  marginTop: 50,
+                  marginLeft: 70
+                }}
+              >
+                <ShowCard userVars={ props.userVars } />
+              </div>
+            </Layout.Content>
+          </Layout>
+        </Layout.Content>
       </Layout>
     );
   }
