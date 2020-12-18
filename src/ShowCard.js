@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Card, Modal, Descriptions, Badge, Avatar, Spin, Popover, message, Layout, Button, Typography, Row, Col, Input, List } from 'antd';
-import { UserOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Space, Card, Modal, Descriptions, Badge, Avatar, Spin, Popover, message, Layout, Button, Typography, Row, Col, Input, List, Upload } from 'antd';
+import { UserOutlined, CheckOutlined, CloseOutlined, UploadOutlined } from '@ant-design/icons';
 import { GET, POST } from './Network';
 
-import swain from "./swain.jpg";
 import poster1 from "./1.jpg";
 import poster2 from "./2.jpg";
 import poster3 from "./3.jpg";
@@ -14,6 +13,31 @@ import poster7 from "./7.jpg";
 import poster8 from "./8.jpg";
 import poster9 from "./9.jpg";
 import poster10 from "./10.jpg";
+import { Select, Form, DatePicker, InputNumber } from 'antd'
+
+import moment from 'moment';
+
+
+Date.prototype.format = function(fmt) { 
+  var o = { 
+     "M+" : this.getMonth()+1,                 //月份 
+     "d+" : this.getDate(),                    //日 
+     "h+" : this.getHours(),                   //小时 
+     "m+" : this.getMinutes(),                 //分 
+     "s+" : this.getSeconds(),                 //秒 
+     "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+     "S"  : this.getMilliseconds()             //毫秒 
+ }; 
+ if(/(y+)/.test(fmt)) {
+         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+ }
+  for(var k in o) {
+     if(new RegExp("("+ k +")").test(fmt)){
+          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+      }
+  }
+ return fmt; 
+}
 
 
 export const ShowCard = (props) => {
@@ -25,6 +49,7 @@ export const ShowCard = (props) => {
   const [applyVisible1, setApplyVisible1] = useState(false);
   const [applyVisible2, setApplyVisible2] = useState(false);
   const [applyVisible3, setApplyVisible3] = useState(false);
+  const [changeCallUp, setChangeCallUp] = useState(false);
   const { Paragraph } = Typography;
   const { TextArea } = Input;
   const calluplist = ["技术交流", "学术探讨", "社会实践", "公益志愿", "娱乐游玩"];
@@ -130,6 +155,59 @@ export const ShowCard = (props) => {
     </Space>
   ));
 
+
+
+
+  const [form] = Form.useForm();
+
+  const showChangeCallUp = () => {
+    form.setFieldsValue({
+      "title": detail.name,
+      "type": String(detail.type),
+      "endtime": moment(detail.end_time),
+      "population": detail.member,
+      "description": detail.description,
+    })
+    setChangeCallUp(true);
+  };
+
+  const changeSubmit = (values) => {
+    console.log(values);
+    const payload = {
+      'id': `${detail.id}`, 
+      'title': values.title,
+      'type': values.type,
+      'endtime': values.endtime.format('YYYY-MM-DD'),
+      'description': values.description,
+      'population': `${values.population}`,
+      'img': 'no image',
+    };
+    console.log(payload);
+
+    POST('/changecallup', payload, (json) => {
+      message.success("Call up changed successfully!")
+    }, (errMsg) => {
+      message.error(errMsg);
+      //form.resetFields();
+    });
+    handleOk();
+  };
+
+  const handleCancel = () => {
+    setChangeCallUp(false);
+    setDetail({ id: '' });
+  };
+  const handleOk = () => {
+    setChangeCallUp(false);
+    setDetail({ id: '' });
+  };
+
+  var d = new Date().format('yyyy-MM-dd'); 
+  function disabledDate(current) {
+    return current.format('YYYY-MM-DD') < d;
+  }
+
+
   return (
     <>
       <Space className='main-col' align='center' direction='vertical' size={50} >
@@ -199,7 +277,12 @@ export const ShowCard = (props) => {
                     <Button type="primary" shape="round" onClick={()=>setApplyVisible1(true)} disabled={detail.state !== 2} >
                       管理用户申请
                     </Button> :
-                    "还没有用户申请!"
+                    <>
+                      还没有用户申请!
+                      <Button type='primary' shape='round' onClick={showChangeCallUp} style={{ marginLeft: 30 }}>
+                        修改召集令
+                      </Button>
+                    </>
                   }
                 </Descriptions.Item>
               </> :
@@ -433,6 +516,131 @@ export const ShowCard = (props) => {
             </List.Item>
           )}
         />
+      </Modal>
+
+
+
+      
+
+      
+
+      
+      <Modal
+        title={<div style={{fontSize: 20}}>修改召集令</div>}
+        centered
+        width={910}
+        visible={changeCallUp}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        destroyOnClose={true}
+        footer={null}
+      >
+        <Form  name="changeCallUp" form={form} initialValues={{ remember: true }} onFinish={(values)=>changeSubmit(values)} preserve={false}>
+
+          <Layout style={{backgroundColor: 'white', height: 300, marginTop: 15, marginLeft: 15 }} >
+            <Layout style={{  backgroundColor: 'transparent',}} >
+              <Layout.Sider width={550} style={{ backgroundColor: 'transparent' }} >
+                <Layout width={450} style={{ backgroundColor: 'transparent' }} >
+                  <Layout height={300} style={{ backgroundColor: 'transparent' }} >
+                    <Layout.Sider width={380} style={{ backgroundColor: 'transparent', }} >
+                      <Form.Item name="title" rules={[{ required: true, message: 'Please input the title!' }]} >
+                        <Input
+                          placeholder="Title"
+                          autoComplete="off"
+                          style={{ width: 330, }}
+                          // defaultValue={detail.name}
+                        />
+                      </Form.Item>
+                    </Layout.Sider>
+
+                    <Layout.Content>
+                      <Form.Item name="type" rules={[{ required: true, message: 'Please choose the type!' }]}>
+                        <Select style={{ width: 120, }}
+                          // defaultValue={String(detail.type)}
+                        >
+                          <Select.Option value='1'>技术交流</Select.Option>
+                          <Select.Option value='2'>学业探讨</Select.Option>
+                          <Select.Option value='3'>社会实践</Select.Option>
+                          <Select.Option value='4'>公益志愿</Select.Option>
+                          <Select.Option value='5'>娱乐游玩</Select.Option>
+                        </Select>
+                      </Form.Item>
+                    </Layout.Content>
+                  </Layout>
+
+                  <Layout height={300} style={{ backgroundColor: 'transparent', }} >
+                    <Layout.Sider width={250} style={{ backgroundColor: 'transparent', }} >
+                      <Form.Item name="endtime" rules={[{ required: true, message: 'Please input the end date!' }]} >
+                        <DatePicker
+                          placeholder='Finish date'
+                          disabledDate={disabledDate}
+                          inputReadOnly
+                          style={{ width: 200 }}
+                          // defaultValue={moment(detail.end_time)}
+                        />
+                      </Form.Item>
+                    </Layout.Sider>
+
+                    <Layout.Content>
+                      <Form.Item name="population" rules={[{ required: true, message: 'Please input the person number!' }]} >
+                        <InputNumber
+                          min={1}
+                          placeholder='Population'
+                          style={{ width: 120 }}
+                          // defaultValue={detail.member}
+                        />
+                      </Form.Item>
+                    </Layout.Content>
+                  </Layout>
+                  
+                  <Form.Item name="description" rules={[{ required: true, message: 'Please input the description!' }]} >
+                    <Input.TextArea
+                      placeholder="Discription"
+                      showCount
+                      maxLength={140}
+                      rows={4}
+                      autoComplete="off"
+                      // defaultValue={detail.description}
+                      style={{ width: 500, }}
+                    />
+                  </Form.Item>
+                </Layout>
+              </Layout.Sider>
+
+              <Layout.Content>
+                <Form.Item name="image" rules={[{ required: false, message: 'Please upload the event picture!' }]} >
+                  {/* <Upload {...pppp}> */}
+                  <Upload>
+                    <Button icon={<UploadOutlined />}
+                      style={{
+                        width: 240,
+                        height: 180
+                      }}
+                    >upload</Button>
+                  </Upload>
+                </Form.Item>
+              </Layout.Content>
+            </Layout>
+            
+            <Layout style={{backgroundColor: 'transparent'}}>
+              <Row gutter={16} justify="end" style={{marginRight: 10}}>
+                <Col>
+                  <Button key="back" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                </Col>
+
+                <Col>
+                  <Form.Item>
+                    <Button key="submit" type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Layout>
+          </Layout>
+        </Form>
       </Modal>
     </>  
   )

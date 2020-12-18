@@ -6,6 +6,7 @@ import { ShowCard } from './ShowCard.js';
 import { UserInfo } from './UserInfo.js';
 import { Manager } from './Manager.js';
 import { AddEvent } from './AddEvent.js';
+import Form from 'antd/lib/form/Form';
 
 import './Home.less';
 
@@ -15,6 +16,8 @@ import avatar2 from "./avatar2.png";
 import avatar3 from "./avatar3.png";
 import avatar4 from "./avatar4.png";
 import avatar5 from "./avatar5.png";
+
+
 
 
 export const Home = (props) => {
