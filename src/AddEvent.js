@@ -12,7 +12,7 @@ import { UploadOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons
 
 import { Row, Col } from "antd";
 
-import avatar from "./avatar.png";
+
 import swain from "./swain.jpg";
 
 

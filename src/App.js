@@ -6,6 +6,7 @@ import { SignUp } from './SignUp';
 import './App.less';
 
 const App = () => {
+  const [id, setID] = useState(null);
   const [user, setUser] = useState(null);
   // const [password, setPassword] = useState(null);
   const [phone, setPhone] = useState(null);
@@ -18,6 +19,7 @@ const App = () => {
   const [isLogIn, setIsLogIn] = useState(false);
 
   const userLogIn = (userinfo) => {
+    setID(userinfo.id);
     setUser(userinfo.name);
     setPhone(userinfo.phone_num);
     setDescription(userinfo.description);
@@ -30,7 +32,7 @@ const App = () => {
   };
 
   const userVars = {
-    user, setUser, phone, setPhone, description, setDescription, userType, setUserType, identityType, setIdentityType, identityNum, setIdentityNum, level, setLevel, city, setCity, isLogIn, setIsLogIn, userLogIn
+    id, setID, user, setUser, phone, setPhone, description, setDescription, userType, setUserType, identityType, setIdentityType, identityNum, setIdentityNum, level, setLevel, city, setCity, isLogIn, setIsLogIn, userLogIn
   };
 
   return (

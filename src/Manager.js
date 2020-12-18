@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Modal, Button, List, Row, Col, message } from 'antd';
+import { Menu, Modal, Button, List, Row, Col, message, Statistic, Select } from 'antd';
 import { PieChartOutlined, UserOutlined, PhoneOutlined, IdcardOutlined, HomeOutlined, TeamOutlined, TrophyOutlined } from '@ant-design/icons';
 import { GET } from './Network';
 
@@ -9,8 +9,13 @@ export const Manager = (props) => {
   const [current, setCurrent] = useState("1");
 
   const showModal = () => {
-    setVisible(true);
+    if (props.showtype == 4)
+      setVisible(true);
+    else
+      setVisible(false);
   };
+
+  useEffect(showModal, [props.showtype]);
 
   const handleOk = () => {
     setVisible(false);
@@ -46,9 +51,6 @@ export const Manager = (props) => {
 
   return (
     <>
-      <Button onClick={showModal} shape="round">
-        Manage
-      </Button>
       <Modal
         visible={visible}
         destroyOnClose={true}
@@ -80,51 +82,51 @@ export const Manager = (props) => {
 
 
 const CallUpInfo = () => {
-  return (null);
+  const [profit, setProfit] = useState(0);
+  const [year, setYear] = useState("2020");
+  const [month, setMonth] = useState("12");
 
-    // <List
-    //   itemLayout="horizontal"
-    //   pagination={{
-    //     onChange: page => {
-    //       console.log(page);
-    //     },
-    //     pageSize: 5,
-    //   }}
-    //   dataSource={}
-    //   renderItem={item => (
-    //     <List.Item
-    //       key={item.title}
-    //     >
-    //       <List.Item.Meta
-    //         avatar={<SlidersTwoTone style={{ fontSize: 28 }} />}
-    //         title={<p style={{ fontSize: 20, margin: 0, padding: 0 }} >{item.title}</p>}
-    //         description={
-    //           <p style={{ fontSize: 14, margin: '0px 0px 4px', padding: 0 }} >
-    //             {item.time} by <b>{item.owner}</b> ver. <b>{item.version}</b>
-    //           </p>
-    //         }
-    //         style={{ margin: 0, padding: 0 }}
-    //       />
-    //       <Row justify="space-around" align="middle" >
-    //         <Col span={11} >
-    //           {item.description}
-    //         </Col>
-    //         <Col span={4} >
-    //           <p style={{ fontSize: 16, margin: 0, padding: 0 }}>Accuracy:</p>
-    //         </Col>
-    //         <Col span={3} >
-    //           <p style={{ fontSize: 24, margin: 0, padding: 0 }}><b>{item.accuracy}</b></p>
-    //         </Col>
-    //         <Col span={6} >
-    //           <Button shape="round" type="primary" disabled={item.current} style={{ border: 0 }}>
-    //             Set as Current
-    //           </Button>
-    //         </Col>
-    //       </Row>
-    //     </List.Item>
-    //   )}
-    // />
-  
+  return (
+    <Row align="middle" >
+      <Col span={12} >
+        <div style={{ height: 200, padding: 20}} >
+          <Row align="middle" style={{ marginTop: 50}}>
+            <Col offset={1} span={8} >
+              <Select defaultValue='2020' style={{ width: '100%' }} onChange={(value) => { setYear(value); }} >
+                <Select.Option value='2020'>2020</Select.Option>
+              </Select>
+            </Col>
+            <Col offset={1} span={2} >年</Col>
+            <Col offset={1} span={8} >
+              <Select defaultValue='12' style={{ width: '100%' }} onChange={(value) => { setMonth(value); }} >
+                <Select.Option value='1'>1</Select.Option>
+                <Select.Option value='2'>2</Select.Option>
+                <Select.Option value='3'>3</Select.Option>
+                <Select.Option value='4'>4</Select.Option>
+                <Select.Option value='5'>5</Select.Option>
+                <Select.Option value='6'>6</Select.Option>
+                <Select.Option value='7'>7</Select.Option>
+                <Select.Option value='8'>8</Select.Option>
+                <Select.Option value='9'>9</Select.Option>
+                <Select.Option value='10'>10</Select.Option>
+                <Select.Option value='11'>11</Select.Option>
+                <Select.Option value='12'>12</Select.Option>
+              </Select>
+            </Col>
+            <Col offset={1} span={2} >月</Col>
+          </Row>
+        </div>
+        <div style={{ height: 200, padding: 20 }} >
+          <Statistic title="收益" value={profit} style={{ marginLeft: 150 }} valueStyle={{ fontSize: 50 }}/>
+        </div>
+      </Col>
+      <Col span={12} >
+        <div style={{ height: 400, padding: 20 }} >
+
+        </div>
+      </Col>
+    </Row>
+  );
 };
 
 const UserList = () => {

@@ -3,8 +3,17 @@ import { Space, Card, Modal, Descriptions, Badge, Avatar, Spin, Popover, message
 import { UserOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { GET, POST } from './Network';
 
-import avatar from "./avatar.png";
 import swain from "./swain.jpg";
+import poster1 from "./1.jpg";
+import poster2 from "./2.jpg";
+import poster3 from "./3.jpg";
+import poster4 from "./4.jpg";
+import poster5 from "./5.jpg";
+import poster6 from "./6.jpg";
+import poster7 from "./7.jpg";
+import poster8 from "./8.jpg";
+import poster9 from "./9.jpg";
+import poster10 from "./10.jpg";
 
 
 export const ShowCard = (props) => {
@@ -18,33 +27,82 @@ export const ShowCard = (props) => {
   const [applyVisible3, setApplyVisible3] = useState(false);
   const { Paragraph } = Typography;
   const { TextArea } = Input;
+  const calluplist = ["技术交流", "学术探讨", "社会实践", "公益志愿", "娱乐游玩"];
+  const reqstate = [
+    { color: "#F4D03F", text: "待处理" },
+    { color: "#58D68D", text: "批准" },
+    { color: "#EC7063", text: "拒绝" },
+    { color: "#99A3A4", text: "已取消" }
+  ];
+  const callupstate = [
+    { color: "#58D68D", text: "已完成" },
+    { color: "#F4D03F", text: "待响应" },
+    { color: "#99A3A4", text: "已取消" },
+    { color: "#EC7063", text: "到期未达成" }
+  ];
+  const posterList = [poster1, poster2, poster3, poster4, poster5, poster6, poster7, poster8, poster9, poster10];
 
   const getCallup = () => {
+    const showtype = props.showtype;
+    var count = 0;
+    var participate = false;
     GET('/calluplist',
       (json) => {
+        const tempCallupList = [];
+        json.callupinfo.forEach((callup) => {
+          if ((props.specificType == 0 || props.specificType == callup.type) && callup.name.search(props.searchKey) != -1)
+            tempCallupList.push(callup);
+        });
         const newCallupList = [];
-        json.callupinfo.forEach((callup, index) => {
-          if (index % 4 === 0)
-            newCallupList.push([]);
-          newCallupList[newCallupList.length - 1].push(callup);
+        tempCallupList.forEach((callup, index) => {
+          if (showtype == 2) {
+            if (callup.owner === props.userVars.user) {
+              if (count % 4 === 0)
+                newCallupList.push([]);
+              newCallupList[newCallupList.length - 1].push(callup);
+              count = count + 1;
+            }
+          } else if (showtype == 3) {
+            participate = false;
+            for (let i = 0; i < callup.requests.length; i++) {
+              if (callup.requests[i].user_name === props.userVars.user) {
+                participate = true;
+              }
+            }
+            if (participate) {
+              if (count % 4 === 0)
+                newCallupList.push([]);
+              newCallupList[newCallupList.length - 1].push(callup);
+              count = count + 1;
+            }
+          } else {
+            if (index % 4 === 0)
+              newCallupList.push([]);
+            newCallupList[newCallupList.length - 1].push(callup);
+          }
         })
         setCallupList(newCallupList);
+        console.log(callupList);
       },
       (errMsg) => message.error(errMsg)
     );
   };
 
-  useEffect(getCallup, []);
+  useEffect(getCallup, [props.showtype, props.specificType, props.searchKey]);
 
   const showDetail = (callup) => {
     setMyReq({ user_id: '' });
+    var accept = 0;
     for (let i = 0; i < callup.requests.length; i++) {
       if (callup.requests[i].user_name === props.userVars.user) {
         setMyReq(callup.requests[i]);
       }
+      if (callup.requests[i].state === 2) {
+        accept = accept + 1;
+      }
     }
     setRequests(callup.requests);
-    setDetail(callup);
+    setDetail({ ...callup, acceptReq: accept });
   };
 
 
@@ -60,7 +118,7 @@ export const ShowCard = (props) => {
               // e.stopPropagation();
             }}
             style={{ width: 320 }}
-            cover={ <img src={swain} alt='swain' /> }
+            cover={ <img src={posterList[callup.id % 10]} alt='poster' /> }
           >
             <Card.Meta
               title={ <Paragraph >{callup.name}</Paragraph> }
@@ -89,7 +147,7 @@ export const ShowCard = (props) => {
           </p>
         }
         footer={[
-          <Button key="back" type="primary" onClick={() => setDetail({ id: '' })}>
+          <Button key="back" type="primary" shape="round" onClick={() => setDetail({ id: '' })}>
             Return
           </Button>
         ]}
@@ -99,14 +157,14 @@ export const ShowCard = (props) => {
             <Descriptions.Item label="召集令描述" span={3} >
               {detail.description}
             </Descriptions.Item>
+            <Descriptions.Item label="召集令类型" >
+              {calluplist[detail.type - 1]}
+            </Descriptions.Item>
             <Descriptions.Item label="发布者" >
               {detail.owner}
             </Descriptions.Item>
             <Descriptions.Item label="所在城市" >
               {detail.city}
-            </Descriptions.Item>
-            <Descriptions.Item label="招募人数" >
-              {detail.member}
             </Descriptions.Item>
             <Descriptions.Item label="结束时间" >
               {detail.end_time}
@@ -117,31 +175,48 @@ export const ShowCard = (props) => {
             <Descriptions.Item label="修改时间" >
               {detail.mtime}
             </Descriptions.Item>
+            <Descriptions.Item label="招募人数" >
+              {detail.member}
+            </Descriptions.Item>
             <Descriptions.Item label="申请人数" >
               {requests.length}
             </Descriptions.Item>
+            <Descriptions.Item label="已批准人数" >
+              {detail.acceptReq}
+            </Descriptions.Item>
+            <Descriptions.Item label="状态" >
+              {
+                !detail.id ? <></> : <Badge color={callupstate[detail.state - 1].color} text={callupstate[detail.state - 1].text} />
+              }
+            </Descriptions.Item>
             {detail.owner === props.userVars.user ?
-              <Descriptions.Item label="管理申请" span={2} >
-                {requests.length > 0 ?
-                  <Button type="primary" shape="round" onClick={()=>setApplyVisible1(true)} >
-                    管理用户申请
-                  </Button> :
-                  "还没有用户申请!"
-                }
-              </Descriptions.Item> :
-              <Descriptions.Item label="申请" span={2} >
+              <>
+                <Descriptions.Item label="修改" >
+                  修改召集令
+                </Descriptions.Item>
+                <Descriptions.Item label="管理申请" >
+                  {requests.length > 0 ?
+                    <Button type="primary" shape="round" onClick={()=>setApplyVisible1(true)} disabled={detail.state !== 2} >
+                      管理用户申请
+                    </Button> :
+                    "还没有用户申请!"
+                  }
+                </Descriptions.Item>
+              </> :
+              <Descriptions.Item label="我的申请" span={2} >
                 {myReq.user_id ?
                   <Row align="middle">
                     <Col span={5} >
-                      {"todo 申请"}
+                      <Badge color={reqstate[myReq.state - 1].color} text={reqstate[myReq.state - 1].text} />
                     </Col>
                     <Col offset={1} span={5} >
-                      <Button type="primary" shape="round" onClick={()=>setApplyVisible2(true)} >
+                      <Button type="primary" shape="round" onClick={() => setApplyVisible2(true)}
+                        disabled={detail.state !== 2 || myReq.state !== 1}>
                         修改申请
                       </Button>
                     </Col>
                   </Row> :
-                  <Button type="primary" shape="round" onClick={()=>setApplyVisible3(true)} >
+                  <Button type="primary" shape="round" onClick={()=>setApplyVisible3(true)} disabled={detail.state !== 2} >
                     申请
                   </Button>
                 }
@@ -159,6 +234,7 @@ export const ShowCard = (props) => {
           setApplyVisible3(false);
           setDetail({ id: '' });
           setNewDescription("");
+          getCallup();
         }}
         title={
           <p style={{ fontSize: 30 }} >
@@ -166,10 +242,11 @@ export const ShowCard = (props) => {
           </p>
         }
         footer={[
-          <Button key="back" type="primary" onClick={() => {
+          <Button key="back" type="primary" shape="round" onClick={() => {
             setApplyVisible3(false);
             setDetail({ id: '' });
             setNewDescription("");
+            getCallup();
           }}>
             Return
           </Button>
@@ -223,6 +300,7 @@ export const ShowCard = (props) => {
           setApplyVisible2(false);
           setDetail({ id: '' });
           setNewDescription("");
+          getCallup();
         }}
         title={
           <p style={{ fontSize: 30 }} >
@@ -230,10 +308,11 @@ export const ShowCard = (props) => {
           </p>
         }
         footer={[
-          <Button key="back" type="primary" onClick={() => {
+          <Button key="back" type="primary" shape="round" onClick={() => {
             setApplyVisible2(false);
             setDetail({ id: '' });
             setNewDescription("");
+            getCallup();
           }}>
             Return
           </Button>
@@ -284,6 +363,7 @@ export const ShowCard = (props) => {
         onCancel={() => {
           setApplyVisible1(false);
           setDetail({ id: '' });
+          getCallup();
         }}
         title={
           <p style={{ fontSize: 30 }} >
@@ -291,9 +371,10 @@ export const ShowCard = (props) => {
           </p>
         }
         footer={[
-          <Button key="back" type="primary" onClick={() => {
+          <Button key="back" type="primary" shape="round" onClick={() => {
             setApplyVisible1(false);
             setDetail({ id: '' });
+            getCallup();
           }}>
             Return
           </Button>
@@ -317,7 +398,7 @@ export const ShowCard = (props) => {
                   }, (errMsg) => {
                     message.error(errMsg);
                   })
-                }} disabled={item.state === 2 || item.state === 4} >
+                }} disabled={detail.acceptReq >= detail.member || item.state === 2 || item.state === 4} >
                   <CheckOutlined />
                 </Button> ,
                 <Button shape="circle" onClick={() => {

@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Layout, Menu, Button, Affix, Avatar, Select, Input } from 'antd';
 
-import { Layout, Menu, Button, Affix, Avatar, Card, Tag, Divider, Select, Input, Row, Col, Tooltip, ConfigProvider, DatePicker, message, Empty} from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons'
-
-import avatar from "./avatar.png";
-import swain from "./swain.jpg";
-//import 'antd/dist/antd.css';
-import './Home.less';
-
-import { IconMap } from 'antd/lib/result';
-import TextArea from 'antd/lib/input/TextArea';
 import { ShowCard } from './ShowCard.js';
 import { UserInfo } from './UserInfo.js';
 import { Manager } from './Manager.js';
-
 import { AddEvent } from './AddEvent.js';
 
-const { Search } = Input;
-const onSearch = value => console.log(value);
-const cardnum = 35;
+import './Home.less';
+
+import avatar from "./avatar.png";
+import avatar1 from "./avatar1.png";
+import avatar2 from "./avatar2.png";
+import avatar3 from "./avatar3.png";
+import avatar4 from "./avatar4.png";
+import avatar5 from "./avatar5.png";
+
 
 export const Home = (props) => {
   let history = useHistory();
-  // let location = useLocation();
-  // props.userVars.setIsLogIn(true);
   const [pageHeight, setPageHeight] = useState(window.document.body.clientHeight);
   const [pageWidth, setPageWidth] = useState(window.document.body.innerWidth);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [specificType, setSpecificType] = useState(0);
+  const [searchKey, setSearchKey] = useState("");
+  const { Search } = Input;
+  const avatarList = [avatar1, avatar2, avatar3, avatar4, avatar5];
 
   useEffect(() => {
     setPageHeight(window.document.body.clientHeight);
@@ -35,31 +34,27 @@ export const Home = (props) => {
 
   if (props.userVars.isLogIn) {
     return (
-      <Layout
-        className='layout'
+      <Layout className='layout'
         style={{
           height: pageHeight,
           width: pageWidth
         }}
       >
         <Affix offsetTop={0} >
-          <Layout.Sider
-            width={350}
+          <Layout.Sider width={350}
             style={{
               borderRight: 0,
               height: pageHeight
             }}
           >
-            <Layout
-              className='sider-back'
+            <Layout className='sider-back'
               style={{
                 height: pageHeight,
-                backgroundColor: '#FDEBD0'
+                backgroundColor: '#21618C'
               }}
             >
               <Layout.Content>
-                <Layout
-                  className='headpic-back'
+                <Layout className='headpic-back'
                   style={{
                     height: 320,
                     backgroundColor: 'transparent'
@@ -68,7 +63,7 @@ export const Home = (props) => {
                   <Avatar
                     size={210}
                     shape='circle'
-                    src={avatar}
+                    src={ props.userVars.userType == 2 ? avatar : avatarList[props.userVars.id % 5] }
                     alt="headpic"
                     style={{
                       margin: '70px 70px 40px 70px',
@@ -80,9 +75,7 @@ export const Home = (props) => {
                 </div>
 
                 <div style={{ height: 50, textAlign: 'center' }} >
-                  <Button type='link' shape="round"
-                    onClick={() => { props.userVars.setIsLogIn(false); }}
-                  >
+                  <Button type='link' shape="round" onClick={() => { props.userVars.setIsLogIn(false); }} >
                     退出登录
                   </Button>
                 </div>
@@ -91,47 +84,26 @@ export const Home = (props) => {
                   theme='light'
                   mode='inline'
                   defaultSelectedKeys={['1']}
+                  onClick={(e) => { setCurrentPage(e.key); }}
                 >
-                  <Menu.Item
-                    className='menu-text'
-                    key="1"
-                  >All Events</Menu.Item>
-                  <Menu.Item
-                    className='menu-text'
-                    key="2"
-                  >Posted</Menu.Item>
-                  <Menu.Item
-                    className='menu-text'
-                    key="3"
-                  >Joined</Menu.Item>
+                  <Menu.Item className='menu-text' key="1" >召集令大厅</Menu.Item>
+                  {props.userVars.userType == 1 ?
+                    <Menu.Item className='menu-text' key="2" >我的发布</Menu.Item> : <></>
+                  }
+                  {props.userVars.userType == 1 ?
+                    <Menu.Item className='menu-text' key="3" >我的申请</Menu.Item> : <></>
+                  }
                   {props.userVars.userType == 2 ?
-                    <Menu.Item
-                      className='menu-text'
-                      key="4"
-                    >
-                      Manage
-                    </Menu.Item> :
-                    <></>
+                    <Menu.Item className='menu-text' key="4" >管理<Manager showtype={currentPage} /></Menu.Item> : <></>
                   }
                 </Menu>
-
-                <Manager />
-
-                <Layout
-                  style={{
-                    backgroundColor: 'transparent'
-                  }}
-                >
-                  <p
-                    style={{
-                      marginTop: 60,
-                      textAlign: "center",
-                    }}
-                  >
-                    ©2020 Binbin&Xuanxuan. <br /> All rights reserved.
-                  </p>
-                </Layout>
               </Layout.Content>
+                
+              <Layout.Footer style={{ backgroundColor: 'transparent' }} >
+                <p style={{ marginTop: 60, textAlign: "center", }} >
+                  ©2020 Binbin&Xuanxuan. <br /> All rights reserved.
+                </p>
+              </Layout.Footer>
             </Layout>
           </Layout.Sider>
         </Affix>
@@ -143,27 +115,23 @@ export const Home = (props) => {
                 className='header-back'
                 style={{
                   padding: 0,
-                  // backgroundColor: 'black'
+                  backgroundColor: '#154360'
                 }}
               >
                 <Search
                   className="searchBox"
                   placeholder='Search something'
                   allowClear
-                  onSearch={onSearch}
+                  onSearch={(value) => { setSearchKey(value); }}
                   background='transparent'
                   style={{
                     width: 400,
                     margin: '16px 26px',
                     background: 'transparent',
-                    
                   }}
                 />
-                <Select
-                  defaultValue='all'
-                  style={{ width: 120 }}  
-                >
-                  <Select.Option value='all'>ALL</Select.Option>
+                <Select defaultValue='0' style={{ width: 120 }} onChange={(value) => { setSpecificType(value); }} >
+                  <Select.Option value='0'>全部类别</Select.Option>
                   <Select.Option value='1'>技术交流</Select.Option>
                   <Select.Option value='2'>学业探讨</Select.Option>
                   <Select.Option value='3'>社会实践</Select.Option>
@@ -179,9 +147,8 @@ export const Home = (props) => {
                 style={{
                   marginTop: 50,
                   marginLeft: 70
-                }}
-              >
-                <ShowCard userVars={ props.userVars } />
+                }} >
+                <ShowCard userVars={props.userVars} showtype={currentPage} specificType={specificType} searchKey={searchKey} />
               </div>
             </Layout.Content>
           </Layout>
