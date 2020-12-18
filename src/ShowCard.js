@@ -270,19 +270,15 @@ export const ShowCard = (props) => {
             {detail.owner === props.userVars.user ?
               <>
                 <Descriptions.Item label="修改" >
-                  修改召集令
+                  <Button type='primary' shape='round' onClick={showChangeCallUp} style={{ marginLeft: 30 }}>
+                    修改召集令
+                  </Button>
                 </Descriptions.Item>
                 <Descriptions.Item label="管理申请" >
                   {requests.length > 0 ?
                     <Button type="primary" shape="round" onClick={()=>setApplyVisible1(true)} disabled={detail.state !== 2} >
                       管理用户申请
-                    </Button> :
-                    <>
-                      还没有用户申请!
-                      <Button type='primary' shape='round' onClick={showChangeCallUp} style={{ marginLeft: 30 }}>
-                        修改召集令
-                      </Button>
-                    </>
+                    </Button> : "还没有用户申请!"
                   }
                 </Descriptions.Item>
               </> :
