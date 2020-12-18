@@ -16,10 +16,13 @@ import { UserInfo } from './UserInfo.js';
 import { Manager } from './Manager.js';
 
 import { AddEvent } from './AddEvent.js';
+import Form from 'antd/lib/form/Form';
 
 const { Search } = Input;
 const onSearch = value => console.log(value);
 const cardnum = 35;
+
+
 
 export const Home = (props) => {
   let history = useHistory();
@@ -190,7 +193,7 @@ export const Home = (props) => {
                 marginLeft: 40
               }}
             >
-              <Row gutter={[16,32]}>
+              {/* <Row gutter={[16,32]}>
                 <Col span={6}>
                   <ShowCard attr={1}/>
                 </Col>
@@ -216,39 +219,11 @@ export const Home = (props) => {
                 <Col span={6}>
                   <ShowCard attr={8}/>
                 </Col>
-{/* 
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
 
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col>
-                <Col span={6}>
-                  <ShowCard />
-                </Col> */}
 
-              </Row>
+              </Row> */}
 
             </div>
-
-
-
 
             {/* <p>{location.state.userName}</p>
             <p>{location.state.userPassword}</p> */}

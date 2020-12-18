@@ -56,21 +56,40 @@ export const AddEvent = (props) => {
 
   const [form] = Form.useForm();
 
+  // const callUpSubmit = (values) => {
+  //   console.log(values);
+  //   const payload = {
+  //     'username': props.userVars.user, 
+  //     'title': values.title,
+  //     'type': values.type,
+  //     'endtime': values.endtime.format('YYYY-MM-DD'),
+  //     'description': values.description,
+  //     'population': `${values.population}`,
+  //     'img': 'no image',
+  //   };
+  //   console.log(payload);
+
+  //   POST('/addcallup', payload, (json) => {
+  //     message.success("Call up added successfully!")
+  //   }, (errMsg) => {
+  //     message.error(errMsg);
+  //     form.resetFields();
+  //   });
+  //   handleOk();
+  // };
+
   const callUpSubmit = (values) => {
-    console.log(values);
+    //console.log(values);
+    //console.log(values.image.fileList[0]);
     const payload = {
-      'username': props.userVars.user, 
+      'head': 'head',
       'title': values.title,
-      'type': values.type,
-      'endtime': values.endtime.format('YYYY-MM-DD'),
-      'description': values.description,
-      'population': `${values.population}`,
-      'img': 'no image',
+      'file': values.image.fileList[0],
     };
     console.log(payload);
 
-    POST('/addcallup', payload, (json) => {
-      message.success("Call up added successfully!")
+    POST('/test', payload, (json) => {
+      message.success("tested successfully!")
     }, (errMsg) => {
       message.error(errMsg);
       form.resetFields();
@@ -79,6 +98,9 @@ export const AddEvent = (props) => {
     handleOk();
   };
 
+
+
+  
 
 
 
@@ -97,10 +119,6 @@ export const AddEvent = (props) => {
     setIsModalVisible(false);
   };
 
-
-
-
-  // const [uploadState, setUploadState] = useState({ loading: false });
 
   // const handleChange = info => {
   //   if (info.file.status === 'uploading') {
@@ -132,21 +150,31 @@ export const AddEvent = (props) => {
   //   );
 
   const pppp = {
-    name: 'file',
+    name: 'thisisafile',
     action: '',
     headers: {
       authorization: 'authorization-text',
     },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+    // onChange(info) {
+    //   if (info.file.status !== 'uploading') {
+    //     console.log(info.file, info.fileList);
+    //   }
+    //   if (info.file.status === 'done') {
+    //     message.success(`${info.file.name} file uploaded successfully`);
+    //   } else if (info.file.status === 'error') {
+    //     message.error(`${info.file.name} file upload failed.`);
+    //   }
+    // },
+
+    // customRequest(file) {
+    //   console.log(file);
+
+    //   POST('/rec', file, (json) => {
+    //     message.success("!!!!!!!!!!!!!!!!!!")
+    //   }, (errMsg) => {
+    //     message.error(errMsg);
+    //   });
+    // }
   };
 
 
@@ -260,9 +288,9 @@ export const AddEvent = (props) => {
                     >
                       <Form.Item name="endtime" rules={[{ required: true, message: 'Please input the end date!' }]} >
                         <DatePicker
-                          format="YYYY-MM-DD"
                           placeholder='Finish date'
                           disabledDate={disabledDate}
+                          inputReadOnly
                           style={{
                             width: 200
                           }}
@@ -312,16 +340,16 @@ export const AddEvent = (props) => {
                 >
                   {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                 </Upload> */}
-
-                <Upload {...pppp}>
-                  <Button icon={<UploadOutlined />}
-                    style={{
-                      width: 280,
-                      height: 210
-                    }}
-                  >upload</Button>
-                </Upload>
-
+                <Form.Item name="image" rules={[{ required: true, message: 'Please upload the event picture!' }]} >
+                  <Upload {...pppp}>
+                    <Button icon={<UploadOutlined />}
+                      style={{
+                        width: 240,
+                        height: 180
+                      }}
+                    >upload</Button>
+                  </Upload>
+                </Form.Item>
               </Layout.Content>
             </Layout>
 
