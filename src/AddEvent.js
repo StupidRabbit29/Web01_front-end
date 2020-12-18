@@ -56,47 +56,47 @@ export const AddEvent = (props) => {
 
   const [form] = Form.useForm();
 
-  // const callUpSubmit = (values) => {
-  //   console.log(values);
-  //   const payload = {
-  //     'username': props.userVars.user, 
-  //     'title': values.title,
-  //     'type': values.type,
-  //     'endtime': values.endtime.format('YYYY-MM-DD'),
-  //     'description': values.description,
-  //     'population': `${values.population}`,
-  //     'img': 'no image',
-  //   };
-  //   console.log(payload);
-
-  //   POST('/addcallup', payload, (json) => {
-  //     message.success("Call up added successfully!")
-  //   }, (errMsg) => {
-  //     message.error(errMsg);
-  //     form.resetFields();
-  //   });
-  //   handleOk();
-  // };
-
   const callUpSubmit = (values) => {
-    //console.log(values);
-    //console.log(values.image.fileList[0]);
+    console.log(values);
     const payload = {
-      'head': 'head',
+      'username': props.userVars.user, 
       'title': values.title,
-      'file': values.image.fileList[0],
+      'type': values.type,
+      'endtime': values.endtime.format('YYYY-MM-DD'),
+      'description': values.description,
+      'population': `${values.population}`,
+      'img': 'no image',
     };
     console.log(payload);
 
-    POST('/test', payload, (json) => {
-      message.success("tested successfully!")
+    POST('/addcallup', payload, (json) => {
+      message.success("Call up added successfully!")
     }, (errMsg) => {
       message.error(errMsg);
       form.resetFields();
     });
-
     handleOk();
   };
+
+  // const callUpSubmit = (values) => {
+  //   //console.log(values);
+  //   //console.log(values.image.fileList[0]);
+  //   const payload = {
+  //     'head': 'head',
+  //     'title': values.title,
+  //     'file': values.image.fileList[0],
+  //   };
+  //   console.log(payload);
+
+  //   POST('/test', payload, (json) => {
+  //     message.success("tested successfully!")
+  //   }, (errMsg) => {
+  //     message.error(errMsg);
+  //     form.resetFields();
+  //   });
+
+  //   handleOk();
+  // };
 
 
 
@@ -120,34 +120,6 @@ export const AddEvent = (props) => {
   };
 
 
-  // const handleChange = info => {
-  //   if (info.file.status === 'uploading') {
-  //     setUploadState(true);
-  //     return;
-  //   }
-  //   if (info.file.status === 'done') {
-  //     // Get this url from response in real world.
-  //     getBase64(info.file.originFileObj, imageUrl =>
-  //       setUploadState({
-  //         imageUrl,
-  //         loading: false,
-  //       }),
-  //     );
-
-  //     console.log(imageUrl);
-  //   }
-
-  // }
-
-
-
-  // const { loading, imageUrl } = uploadState;
-  //   const uploadButton = (
-  //     <div>
-  //       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-  //       <div style={{ marginTop: 8 }}>Upload</div>
-  //     </div>
-  //   );
 
   const pppp = {
     name: 'thisisafile',
@@ -203,8 +175,6 @@ export const AddEvent = (props) => {
         destroyOnClose={true}
         footer={null}
       >
-
-
         <Form form={form} name="addCallUp" initialValues={{ remember: true }} onFinish={(values)=>callUpSubmit(values)} preserve={false}>
 
           <Layout
@@ -258,12 +228,7 @@ export const AddEvent = (props) => {
 
                     <Layout.Content>
                       <Form.Item name="type" rules={[{ required: true, message: 'Please choose the type!' }]}>
-                        <Select
-                          // defaultValue='1'
-                          style={{
-                            width: 120,
-                          }}  
-                        >
+                        <Select style={{ width: 120,}}>
                           <Select.Option value='1'>技术交流</Select.Option>
                           <Select.Option value='2'>学业探讨</Select.Option>
                           <Select.Option value='3'>社会实践</Select.Option>
@@ -329,18 +294,8 @@ export const AddEvent = (props) => {
               </Layout.Sider>
 
               <Layout.Content>
-        
-                {/* <Upload
-                  name="000"
-                  listType="picture-card"
-                  showUploadList={false}
-                  action=""
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                </Upload> */}
-                <Form.Item name="image" rules={[{ required: true, message: 'Please upload the event picture!' }]} >
+              
+                <Form.Item name="image" rules={[{ required: false, message: 'Please upload the event picture!' }]} >
                   <Upload {...pppp}>
                     <Button icon={<UploadOutlined />}
                       style={{

@@ -19,7 +19,7 @@ export const SignUp = (props) => {
       'password': values.password,
       'phone_num': values.phonenum,
       'description': values.description,
-      'identity_type': `${values.identitytype}`,
+      'identity_type': idtype,
       'identity_num': values.identitynum,
       'city': values.city
     };
