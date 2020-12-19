@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Modal, Button, List, Row, Col, message, Statistic, Select } from 'antd';
 import { PieChartOutlined, UserOutlined, PhoneOutlined, IdcardOutlined, HomeOutlined, TeamOutlined, TrophyOutlined } from '@ant-design/icons';
+import { Pie } from '@ant-design/charts';
 import { GET } from './Network';
 
 
@@ -19,14 +20,13 @@ export const Manager = (props) => {
 
   const handleOk = () => {
     setVisible(false);
+    props.setCurrentPage("1");
+    console.log(props.showtype);
   };
 
   const handleCancel = () => {
     setVisible(false);
-  };
-
-  const formSubmit = (values) => {
-    console.log(values);
+    props.setCurrentPage("1");
   };
 
   const handleClick = e => {
@@ -82,9 +82,58 @@ export const Manager = (props) => {
 
 
 const CallUpInfo = () => {
-  const [profit, setProfit] = useState(0);
+  const [profit, setProfit] = useState([0,0,0,0,0]);
   const [year, setYear] = useState("2020");
-  const [month, setMonth] = useState("12");
+  const [month, setMonth] = useState("0");
+
+  const getprofit = () => {
+    GET(`/callupstastic?month=${month == 0 ? "all" : year + '-' + month + '-%'}`,
+      (json) => {
+        const temp = [];
+        for (let i = 0; i < 5; i++)
+          temp.push(json.profit[String(i + 1)]);
+        setProfit(temp);
+      },
+      (errMsg) => message.error(errMsg)
+    );
+  };
+
+  useEffect(getprofit, [year, month]);
+
+  var data = [
+    { type: '技术交流', value: profit[0], },
+    { type: '学术探讨', value: profit[1], },
+    { type: '社会实践', value: profit[2], },
+    { type: '公益志愿', value: profit[3], },
+    { type: '娱乐游玩', value: profit[4], },
+  ];
+  var config = {
+    appendPadding: 10,
+    data: data,
+    angleField: 'value',
+    colorField: 'type',
+    radius: 1,
+    innerRadius: 0.64,
+    meta: {
+      value: {
+        formatter: function formatter(v) {
+          return ''.concat(v, ' \xA5');
+        },
+      },
+    },
+    label: {
+      type: 'inner',
+      offset: '-50%',
+      style: { textAlign: 'center' },
+      autoRotate: false,
+      content: '{value}',
+    },
+    interactions: [
+      // { type: 'element-selected' },
+      // { type: 'element-active' },
+      { type: 'pie-statistic-active' },
+    ],
+  };
 
   return (
     <Row align="middle" >
@@ -98,7 +147,8 @@ const CallUpInfo = () => {
             </Col>
             <Col offset={1} span={2} >年</Col>
             <Col offset={1} span={8} >
-              <Select defaultValue='12' style={{ width: '100%' }} onChange={(value) => { setMonth(value); }} >
+              <Select defaultValue='0' style={{ width: '100%' }} onChange={(value) => { setMonth(value); }} >
+                <Select.Option value='0'>全部</Select.Option>
                 <Select.Option value='1'>1</Select.Option>
                 <Select.Option value='2'>2</Select.Option>
                 <Select.Option value='3'>3</Select.Option>
@@ -116,13 +166,13 @@ const CallUpInfo = () => {
             <Col offset={1} span={2} >月</Col>
           </Row>
         </div>
-        <div style={{ height: 200, padding: 20 }} >
+        {/* <div style={{ height: 200, padding: 20 }} >
           <Statistic title="收益" value={profit} style={{ marginLeft: 150 }} valueStyle={{ fontSize: 50 }}/>
-        </div>
+        </div> */}
       </Col>
       <Col span={12} >
         <div style={{ height: 400, padding: 20 }} >
-
+          <Pie {...config} />
         </div>
       </Col>
     </Row>

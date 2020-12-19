@@ -24,7 +24,7 @@ export const Home = (props) => {
   let history = useHistory();
   const [pageHeight, setPageHeight] = useState(window.document.body.clientHeight);
   const [pageWidth, setPageWidth] = useState(window.document.body.innerWidth);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState("1");
   const [specificType, setSpecificType] = useState(0);
   const [searchKey, setSearchKey] = useState("");
   const { Search } = Input;
@@ -86,8 +86,9 @@ export const Home = (props) => {
                 <Menu
                   theme='light'
                   mode='inline'
-                  defaultSelectedKeys={['1']}
-                  onClick={(e) => { setCurrentPage(e.key); }}
+                  defaultSelectedKeys={[currentPage]}
+                  value={currentPage}
+                  onClick={(e) => { setCurrentPage(e.key); console.log(currentPage); }}
                 >
                   <Menu.Item className='menu-text' key="1" >召集令大厅</Menu.Item>
                   {props.userVars.userType == 1 ?
@@ -97,7 +98,7 @@ export const Home = (props) => {
                     <Menu.Item className='menu-text' key="3" >我的申请</Menu.Item> : <></>
                   }
                   {props.userVars.userType == 2 ?
-                    <Menu.Item className='menu-text' key="4" >管理<Manager showtype={currentPage} /></Menu.Item> : <></>
+                    <Menu.Item className='menu-text' key="4" >管理<Manager showtype={currentPage} setCurrentPage={setCurrentPage}/></Menu.Item> : <></>
                   }
                 </Menu>
               </Layout.Content>
